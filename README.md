@@ -88,6 +88,6 @@ Diferencia porcentual de velocidad: 48.071951581333%</pre>
 <pre>Diferencia total: 0.099838733673096 segundos
 Diferencia porcentual de velocidad: 7.1366305302393%</pre>
 
-**Volumen de datos grande** (con datos grandes la *diferencia de velocidad es casi nula*)
+**Volumen de datos grande** (con datos grandes la **diferencia de velocidad es casi nula**)
 <pre>Diferencia total: 0.29143214225769 segundos
 Diferencia porcentual de velocidad: 0.45639094202677%</pre>
