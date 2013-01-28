@@ -1,12 +1,18 @@
 <?php
-/*
+/**
  * Simple file cache
+ *
+ * This class is great for those who can't use apc or memcached in their proyects.
+ *
  * @author Emilio Cobos (emiliocobos.net) <ecoal95@gmail.com>
- * @version 1.0
+ * @version 1.0.1
+ * @link http://emiliocobos.net/php-cache/
  */
 class Cache {
-	/*
+	/**
 	 * Configuration
+	 *
+	 * @access public
 	 */
 	public static $config = array(
 		'cache_dir' => 'cache',
@@ -14,21 +20,25 @@ class Cache {
 		'expires' => 3
 	);
 
-	/*
-	 * Lets you configure the cache properly, passing an array
-		<code>
-		Cache::configure(array(
-			'expires' => 3,
-			'cache_path' => 'cache'
-		));
-		</code>
-	 * Or passing a key/val
-		<code>
-		Cache::configure('expires', 3);
-		</code>
+	/**
+	 * Lets you configure the cache properly, passing an array:
+	 *
+	 * <code>
+	 * Cache::configure(array(
+	 *   'expires' => 3,
+	 *   'cache_path' => 'cache'
+	 * ));
+	 * </code>
+	 * Or passing a key/val:
+	 *
+	 * <code>
+	 * Cache::configure('expires', 3);
+	 * </code>
+	 *
+	 * @access public
 	 * @param mixed $key the array with de configuration or the key as string
 	 * @param mixed $val the value for the previous key if it was an string
-	 * @return nothing
+	 * @return void
 	 */
 	public static function configure($key, $val = null) {
 		if( is_array($key) ) {
@@ -40,8 +50,9 @@ class Cache {
 		}
 	}
 
-	/*
+	/**
 	 * Get a route to the file associated to that key.
+	 *
 	 * @param string $key
 	 * @return string the filename of the php file
 	 */
@@ -49,8 +60,9 @@ class Cache {
 		return static::$config['cache_path'] . '/' . md5($key) . '.php';
 	}
 
-	/*
+	/**
 	 * Get the data associated with a key
+	 *
 	 * @param string $key
 	 * @return mixed the content you put in, or null if expired or not found
 	 */
@@ -67,8 +79,9 @@ class Cache {
 		}
 	}
 
-	/*
+	/**
 	 * Put content into the cache
+	 *
 	 * @param string $key
 	 * @param mixed $content the the content you want to store
 	 * @param bool $raw whether if you want to store raw data or not. If it is true, $content *must* be a string
@@ -82,8 +95,9 @@ class Cache {
 		return @file_put_contents(self::get_route($key), $raw ? $content : serialize($content)) !== false;
 	}
 
-	/*
+	/**
 	 * Delete data from cache
+	 *
 	 * @param string $key
 	 * @return bool true if the data was removed successfully
 	 */
@@ -95,8 +109,10 @@ class Cache {
 		return @unlink($file);
 	}
 
-	/*
+	/**
 	 * Flush all cache
+	 *
+	 * @return bool always true
 	 */
 	public static function flush() {
 		$cache_files = glob(self::$config['cache_path'] . '/*.php', GLOB_NOSORT);
@@ -106,8 +122,9 @@ class Cache {
 		return true;
 	}
 
-	/*
+	/**
 	 * Check if a file has expired or not.
+	 *
 	 * @param $file the rout to the file
 	 * @param int $time the number of hours it was set to expire
 	 * @return bool if the file has expired or not
