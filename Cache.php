@@ -99,7 +99,7 @@ class Cache {
 	 * Flush all cache
 	 */
 	public static function flush() {
-		$cache_files = glob(self::$config['cache_path'] . '/*.php');
+		$cache_files = glob(self::$config['cache_path'] . '/*.php', GLOB_NOSORT);
 		foreach ($cache_files as $file) {
 			@unlink($file);
 		}

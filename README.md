@@ -2,6 +2,8 @@
 
 Esta clase provee una forma fácil, orientada a objetos de trabajar con una caché basada en el sistema de archivos.
 
+[Leer más]() | [El autor](http://emiliocobos.net)
+
 ## Comenzando
 Lo primero que tienes que hacer es incluir el archivo
 ```php
