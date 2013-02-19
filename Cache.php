@@ -15,7 +15,7 @@ class Cache {
 	 * @access public
 	 */
 	public static $config = array(
-		'cache_dir' => 'cache',
+		'cache_path' => 'cache',
 		// Default expiration time in *hours*
 		'expires' => 3
 	);
@@ -53,6 +53,7 @@ class Cache {
 	/**
 	 * Get a route to the file associated to that key.
 	 *
+	 * @access public
 	 * @param string $key
 	 * @return string the filename of the php file
 	 */
@@ -63,6 +64,7 @@ class Cache {
 	/**
 	 * Get the data associated with a key
 	 *
+	 * @access public
 	 * @param string $key
 	 * @return mixed the content you put in, or null if expired or not found
 	 */
@@ -82,6 +84,7 @@ class Cache {
 	/**
 	 * Put content into the cache
 	 *
+	 * @access public
 	 * @param string $key
 	 * @param mixed $content the the content you want to store
 	 * @param bool $raw whether if you want to store raw data or not. If it is true, $content *must* be a string
@@ -98,6 +101,7 @@ class Cache {
 	/**
 	 * Delete data from cache
 	 *
+	 * @access public
 	 * @param string $key
 	 * @return bool true if the data was removed successfully
 	 */
@@ -112,6 +116,7 @@ class Cache {
 	/**
 	 * Flush all cache
 	 *
+	 * @access public
 	 * @return bool always true
 	 */
 	public static function flush() {
@@ -125,6 +130,7 @@ class Cache {
 	/**
 	 * Check if a file has expired or not.
 	 *
+	 * @access public
 	 * @param $file the rout to the file
 	 * @param int $time the number of hours it was set to expire
 	 * @return bool if the file has expired or not
