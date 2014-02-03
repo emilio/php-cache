@@ -1,4 +1,4 @@
-<?php
+<?php namespace EC\Storage;
 /**
  * Simple file cache
  *
@@ -15,7 +15,7 @@ class Cache {
 	 * @access public
 	 */
 	public static $config = array(
-		'cache_path' => 'cache',
+		'cache_dir' => 'cache',
 		// Default expiration time in *hours*
 		'expires' => 3
 	);
@@ -68,17 +68,13 @@ class Cache {
 	 * @param string $key
 	 * @return mixed the content you put in, or null if expired or not found
 	 */
-	public static function get($key = null, $raw = false) {
-		if( ! $key ) {
-			return null;
-		}
-
-		if( ! self::file_expired($file = self::get_route($key))) {
+	public static function get($key, $raw = false, $custom_time = null) {
+		if( ! self::file_expired($file = self::get_route($key), $custom_time)) {
 			$content = file_get_contents($file);
 			return $raw ? $content : unserialize($content);
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	/**
@@ -91,10 +87,7 @@ class Cache {
 	 *        It can be useful for static html caching.
 	 * @return bool whether if the operation was successful or not
 	 */
-	public static function put($key = null, $content = null, $raw = false) {
-		if( ! $content ) {
-			return false;
-		}
+	public static function put($key, $content, $raw = false) {
 		return @file_put_contents(self::get_route($key), $raw ? $content : serialize($content)) !== false;
 	}
 
@@ -105,7 +98,7 @@ class Cache {
 	 * @param string $key
 	 * @return bool true if the data was removed successfully
 	 */
-	public static function delete($key = null) {
+	public static function delete($key) {
 		if( ! file_exists($file = self::get_route($key)) ) {
 			return true;
 		}
