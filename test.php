@@ -16,7 +16,7 @@ echo "<pre>";
 
 Cache::configure(array(
 	'cache_path' => dirname(__FILE__) . '/cache',
-	'expires' => 3
+	'expires' => 180
 ));
 
 function get_rand_key() {

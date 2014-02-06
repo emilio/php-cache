@@ -16,8 +16,8 @@ class Cache {
 	 */
 	public static $config = array(
 		'cache_dir' => 'cache',
-		// Default expiration time in *hours*
-		'expires' => 3
+		// Default expiration time in *minutes*
+		'expires' => 180,
 	);
 
 	/**
@@ -25,14 +25,14 @@ class Cache {
 	 *
 	 * <code>
 	 * Cache::configure(array(
-	 *   'expires' => 3,
+	 *   'expires' => 180,
 	 *   'cache_path' => 'cache'
 	 * ));
 	 * </code>
 	 * Or passing a key/val:
 	 *
 	 * <code>
-	 * Cache::configure('expires', 3);
+	 * Cache::configure('expires', 180);
 	 * </code>
 	 *
 	 * @access public
@@ -125,13 +125,13 @@ class Cache {
 	 *
 	 * @access public
 	 * @param $file the rout to the file
-	 * @param int $time the number of hours it was set to expire
+	 * @param int $time the number of minutes it was set to expire
 	 * @return bool if the file has expired or not
 	 */
 	public static function file_expired($file, $time = null) {
 		if( ! file_exists($file) ) {
 			return true;
 		}
-		return (time() > (filemtime($file) + 60 * 60 * ($time ? $time : self::$config['expires'])));
+		return (time() > (filemtime($file) + 60 * ($time ? $time : self::$config['expires'])));
 	}
 }

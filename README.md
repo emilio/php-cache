@@ -14,7 +14,7 @@ require 'Cache.php';
 Hay dos opciones: `cache_dir` y `expires`.
 
 * `cache_dir` es el directorio donde se almacenará la caché. Por defecto es un directorio relativo (`cache`)
-* `expires` es el tiempo *en horas* que debe de pasar para que un item de la caché expire
+* `expires` es el tiempo *en minutos* que debe de pasar para que un item de la caché expire
 
 **Importante**: Verifica que el archivo configurado como `cache_dir` tenga permisos de escritura. Además, **si almacenas datos que no deberían ser accesibles públicamente, tu directorio `cache_dir` debería de tener un archivo `.htaccess` con la siguiente línea:**
 ```
