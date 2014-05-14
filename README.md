@@ -39,7 +39,7 @@ Cache::configure(array(
 Para almacenar *cualquier tipo de dato* en la caché usa el método `put()` pasando un identificador (key) y el valor.
 ```php
 Cache::put('identificador', 'valor');
-``` 
+```
 
 ### Obteniendo datos
 Para obtener datos almacenados en la caché usa:
@@ -64,18 +64,14 @@ Cache::flush();
 Este sistema permite pasar un segundo argumento a `get()` y `put()`, que dice si los datos se van a guardar en forma de string directamente, o no. Podría ser útil para cachés de páginas enteras:
 
 ```php
-if( $cached_homepage = Cache::get('index_cached', true) ) {
-	echo $cached_homepage;
-} else {
+if( !($cached_homepage = Cache::get('index_cached', true)) ) {
 	ob_start();
+	// Generar la página principal dinámica
+	// ...
+	$cached_homepage = ob_get_contents();
+	Cache::put('index_cached', $cached_homepage);
 }
-
-// Generar la página principal dinámica
-
-// ...
-Cache::put('index_cached', ob_get_contents());
-
-ob_end_flush();
+echo $cached_homepage;
 ```
 
 
