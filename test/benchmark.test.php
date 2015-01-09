@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *      benchmark.test.php
  *      
@@ -33,15 +33,16 @@
 		
 		global $key, $pathCacheFile;	
 		
-		if ( ! defined( 'DIRECTORY_LA_CACHE' ) ) {  
-			
-			define( 'DIRECTORY_LA_CACHE' , dirname(__FILE__) );	
-			
-		}
-		
 		$key = 'test';
 		
-		$pathCacheFile = "../cache/".md5($key).".php";
+		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache".DIRECTORY_SEPARATOR;
+		
+		$pathCacheFile = $pathCacheDir.md5($key).".php";
+		
+		Cache::configure(array(
+			'cache_path' => $pathCacheDir,
+			'expires' => 180
+			));
 		
 		assert_options(ASSERT_ACTIVE, 1);
 		assert_options(ASSERT_WARNING, 0);
@@ -53,11 +54,6 @@
 			@unlink( $pathCacheFile);
 			
 		}
-		
-		Cache::configure(array(
-			'cache_path' => "../cache",
-			'expires' => 180
-			));
 		
 		
 		

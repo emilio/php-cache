@@ -39,18 +39,12 @@
 		
 		$numRequest = 50;
 		
-		if ( ! defined( 'DIRECTORY_LA_CACHE' ) ) {  
-			
-			define( 'DIRECTORY_LA_CACHE' , dirname(__FILE__) );	
-			
-		}
-		
 		$keyValue1 = "IOvalue1";
 		$keyValue2 = "IOvalue2";
 		$keyValue3 = "IOvalue3";
 		
 		Cache::configure(array(
-			'cache_path' => "../cache",
+			'cache_path' => dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache",
 			'expires' => 180
 			));
 

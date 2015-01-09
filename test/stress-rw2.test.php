@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *      stress-rw2.test.php
  *      
@@ -43,7 +43,7 @@
 		$keyValue3 = "IOvalue3";
 		
 		Cache::configure(array(
-			'cache_path' => "../cache",
+			'cache_path' => dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache",
 			'expires' => 180
 			));
 		

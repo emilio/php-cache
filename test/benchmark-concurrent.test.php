@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  *      benchmark-concurrent.test.php
@@ -25,7 +25,6 @@
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."Cache.php";
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR."function.common.php";
 	
-	$pathCacheFile; 
 	$key; 
 	$pathCacheFile;
 	
@@ -37,8 +36,10 @@
 		
 		$key = 'test';
 		
+		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache".DIRECTORY_SEPARATOR;
+		
 		Cache::configure(array(
-			'cache_path' => "../cache",
+			'cache_path' => $pathCacheDir,
 			'expires' => 180
 			));
 		
@@ -53,7 +54,9 @@
 		$numThread = 5;
 		$nameKeyThread = 'res';
 		
-		$pathCacheFile = "../cache/".md5($key).".php";
+		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache".DIRECTORY_SEPARATOR;
+		
+		$pathCacheFile = $pathCacheDir.md5($key).".php";
 		
 		assert_options(ASSERT_ACTIVE, 1);
 		assert_options(ASSERT_WARNING, 0);
@@ -145,8 +148,8 @@
 		
 		if ( $res ) {
 			
-			printStat( "\n== Cache::get ====",  $stat, $sizeList, $sizeObject );
-			printStat( " ==> Value control memory", $statControl, $sizeList, $sizeObject );
+			printStat( "\n== Cache::get ====",  $stat, $sizeList, $sizeObject, $numThread + 1   );
+			printStat( " ==> Value control memory", $statControl, $sizeList, $sizeObject, $numThread + 1 );
 						
 		}
 		

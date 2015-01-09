@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *      function.common.php
  *      
@@ -92,7 +92,7 @@
 		
 	}
 	
-	function printStat( $text, $stat, $sizeList, $sizeObject ) {
+	function printStat( $text, $stat, $sizeList, $sizeObject, $numThread = 1 ) {
 		
 		$sum = 0;
 		
@@ -104,11 +104,19 @@
 		
 		$count = count( $stat );
 		
-		$average = round( $sum / $count, 1 );
+		$timePerRequest = $sum / $count;
+		$requestPerSec =  1000/$timePerRequest ;
+		
+		$timePerRequest = round( $timePerRequest, 1 );
+		$requestPerSec = round( $requestPerSec );
+		$sum = round( $sum, 1 );
 		
 		echo "$text\n ";
-		echo "Object: sizeList $sizeList (size each object: $sizeObject) \n";
-		echo " Count request: $count, average: $average miliseg\n\n";
+		echo "Object: List size = $sizeList (size each object: $sizeObject) \n";
+		echo " Requests/thread: $count\n";
+		echo " Concurrent thread: $numThread\n";
+		echo " time total: $sum milisec\n";
+		echo " statistics: $timePerRequest milisec/request ($requestPerSec request/sec)\n\n";
 		
 	}
 	
