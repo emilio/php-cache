@@ -1,6 +1,7 @@
-<?php
-/*
- *      stress-rw2.test.php
+<?php 
+
+/**
+ *      robustness-rw.test.php
  *      
  *      Copyright 2015 Miguel Rafael Esteban Martín (www.logicaalternativa.com) <miguel.esteban@logicaalternativa.com>
  *      
@@ -46,6 +47,7 @@
 			'cache_path' => dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache",
 			'expires' => 180
 			));
+
 		
 	}
 
@@ -61,8 +63,7 @@
 		assert_options(ASSERT_ACTIVE, 1);
 		assert_options(ASSERT_WARNING, 0);
 		assert_options(ASSERT_QUIET_EVAL, 1);
-		assert_options(ASSERT_CALLBACK, 'assertHandler');
-		
+		assert_options(ASSERT_CALLBACK, 'assertHandler');		
 		
 		$value1 = generateValueRandom( 100, 20 );
 		
@@ -72,7 +73,7 @@
 		
 		Cache::put( $key, $value1 );
 		
-		deleteValuesResultThread($nameKeyThread, $numThread );
+		deleteValuesResultThread( $nameKeyThread, $numThread );
 		
 	}
 	
@@ -102,11 +103,19 @@
 		
 		for ( $i = 0 ; $i < $numRequest ; $i++ ) {
 			
-			$result["get"] += execThreadGetValue( $key, $value1, $value2, $value3 ) ;
+			$resGetValue = execThreadGetValue( $key, $value1, $value2, $value3 ) ;
+			
+			if ( $resGetValue == -1 ) {
+					
+				$result["get"]["noIsset"]++;
+				
+			} elseif ( $resGetValue == 1 ) {
+				
+				$result["get"]["noValue"]++;
+				
+			}
 			
 			$result["put"] += execThreadPutValue( $key, $value1, $value2, $value3, $i ) ;
-			
-			Cache::delete( $key );
 			
 		}
 		
@@ -118,8 +127,13 @@
 		
 		$valueCache = Cache::get( $key );
 		
-		$res = ! isset( $valueCache )
-					|| $valueCache == $value1
+		if ( ! isset( $valueCache ) ) {
+		
+			return -1;
+		
+		}
+			
+		$res = $valueCache == $value1
 					|| $valueCache == $value2
 					|| $valueCache == $value3
 					;
@@ -139,7 +153,8 @@
 		echo "\n:: STATISTICS :: \n";
 		echo "Number request: ". ( $numThread * $numRequest ) ." \n";
 		echo " ==> Get request error ::\n";
-		echo "  Invalid value: {$allStatResult['get']}, it must be 0\n";
+		echo "  Invalid value: {$allStatResult['get']['noValue']}, it must be 0\n";
+		echo "  Value null: {$allStatResult['get']['noIsset']}, it must be 0\n";
 		echo " ==> Put request error :: \n";
 		echo "  Error to put value: {$allStatResult['put']}, it must be 0\n\n";
 		
@@ -147,7 +162,8 @@
 	
 	function createResultInit() {
 		
-		$result["get"] = 0;
+		$result["get"]["noIsset"] = 0;
+		$result["get"]["noValue"] = 0;
 		$result["put"] = 0;
 		
 		return $result;
@@ -178,9 +194,9 @@
 					
 				} else {
 					
-					$allStatResult["get"] += $result["get"];
-					$allStatResult["put"] += $result["put"];
-					
+					$allStatResult["get"]["noIsset"] += $result["get"]["noIsset"];
+					$allStatResult["get"]["noValue"] += $result["get"]["noValue"];
+					$allStatResult["put"]+= $result["put"];
 				}
 				
 			}
@@ -220,7 +236,7 @@
 		
 		preTest(); benchmarkIO() ; postTest();
 		
-		if ( ! isset( $argv[0] ) )  echo "\n</pre> \n";
+		if ( ! isset( $argv[0] ) )  echo  "\n</pre> \n";
 		
 	}
 	 

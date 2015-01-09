@@ -105,7 +105,7 @@
 		$count = count( $stat );
 		
 		$timePerRequest = $sum / $count;
-		$requestPerSec =  1000/$timePerRequest ;
+		$requestPerSec =  1000 / $timePerRequest ;
 		
 		$timePerRequest = round( $timePerRequest, 1 );
 		$requestPerSec = round( $requestPerSec );
