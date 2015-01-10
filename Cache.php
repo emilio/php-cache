@@ -167,4 +167,5 @@ class Cache {
 		}
 		return (time() > (filemtime($file) + 60 * ($time ? $time : self::$config['expires'])));
 	}
-}
+} 
+?>

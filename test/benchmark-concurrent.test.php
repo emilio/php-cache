@@ -36,7 +36,7 @@
 		
 		$key = 'test';
 		
-		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache".DIRECTORY_SEPARATOR;
+		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache";
 		
 		Cache::configure(array(
 			'cache_path' => $pathCacheDir,
@@ -54,9 +54,8 @@
 		$numThread = 5;
 		$nameKeyThread = 'res';
 		
-		$pathCacheDir = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."cache".DIRECTORY_SEPARATOR;
 		
-		$pathCacheFile = $pathCacheDir.md5($key).".php";
+		$pathCacheFile = Cache::get_route( $key );
 		
 		assert_options(ASSERT_ACTIVE, 1);
 		assert_options(ASSERT_WARNING, 0);
