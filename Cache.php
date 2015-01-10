@@ -8,8 +8,6 @@
  * @version 1.0.1
  * @link http://emiliocobos.net/php-cache/
  * 
- * 2015-01-02  Miguel Rafael Esteban Martín (www.logicaalternativa.com)  <miguel.esteban@logicaalternativa.com>
- * This change avoids mistakes concurrency when reading/ writing a value in cache with several threads.
  */
 class Cache {
 	/**
