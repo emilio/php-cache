@@ -7,6 +7,7 @@
  * @author Emilio Cobos (emiliocobos.net) <ecoal95@gmail.com>
  * @version 1.0.1
  * @link http://emiliocobos.net/php-cache/
+ * 
  */
 class Cache {
 	/**
@@ -88,7 +89,32 @@ class Cache {
 	 * @return bool whether if the operation was successful or not
 	 */
 	public static function put($key, $content, $raw = false) {
-		return @file_put_contents(self::get_route($key), $raw ? $content : serialize($content)) !== false;
+		
+		if ( ! isset( $key ) ) {
+		
+			return false;
+			
+		}
+		
+		$nameFile = self::get_route( $key );
+		
+		$nameFileTemp = str_replace( ".php", uniqid("-" , true).".php", $nameFile );
+		
+		$contentFile = $raw ? $content : serialize($content);
+		
+		$res = @file_put_contents( $nameFileTemp, $contentFile, LOCK_EX );
+		
+		if ( $res !== false ) {
+		
+			return @rename( $nameFileTemp, $nameFile );
+		
+		} else {
+			
+			@unlink( $nameFileTemp );
+			
+		}
+		
+		return false;
 	}
 
 	/**
@@ -99,11 +125,16 @@ class Cache {
 	 * @return bool true if the data was removed successfully
 	 */
 	public static function delete($key) {
-		if( ! file_exists($file = self::get_route($key)) ) {
-			return true;
+		
+		if ( ! isset( $key ) ) {
+		
+			return false;
+			
 		}
-
-		return @unlink($file);
+		
+		@unlink( self::get_route($key) );		
+		
+		return true;
 	}
 
 	/**
@@ -134,4 +165,5 @@ class Cache {
 		}
 		return (time() > (filemtime($file) + 60 * ($time ? $time : self::$config['expires'])));
 	}
-}
+} 
+?>
