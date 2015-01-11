@@ -4,10 +4,10 @@
  *
  * This class is great for those who can't use apc or memcached in their proyects.
  *
- * @author Emilio Cobos (emiliocobos.net) <ecoal95@gmail.com>
+ * @author Emilio Cobos (emiliocobos.net) <ecoal95@gmail.com> and github contributors
  * @version 1.0.1
  * @link http://emiliocobos.net/php-cache/
- * 
+ *
  */
 class Cache {
 	/**
@@ -89,31 +89,18 @@ class Cache {
 	 * @return bool whether if the operation was successful or not
 	 */
 	public static function put($key, $content, $raw = false) {
-		
-		if ( ! isset( $key ) ) {
-		
-			return false;
-			
+		$dest_file_name = self::get_route($key);
+
+		/** Use a unique temporary filename to make writes atomic with rewrite */
+		$temp_file_name = str_replace( ".php", uniqid("-" , true).".php", $dest_file_name );
+
+		$ret = @file_put_contents($temp_file_name, $raw ? $content : serialize($content));
+
+		if (  $ret !== false ) {
+			return @rename($temp_file_name, $dest_file_name);
 		}
-		
-		$nameFile = self::get_route( $key );
-		
-		$nameFileTemp = str_replace( ".php", uniqid("-" , true).".php", $nameFile );
-		
-		$contentFile = $raw ? $content : serialize($content);
-		
-		$res = @file_put_contents( $nameFileTemp, $contentFile, LOCK_EX );
-		
-		if ( $res !== false ) {
-		
-			return @rename( $nameFileTemp, $nameFile );
-		
-		} else {
-			
-			@unlink( $nameFileTemp );
-			
-		}
-		
+
+		@unlink($temp_file_name);
 		return false;
 	}
 
@@ -125,16 +112,7 @@ class Cache {
 	 * @return bool true if the data was removed successfully
 	 */
 	public static function delete($key) {
-		
-		if ( ! isset( $key ) ) {
-		
-			return false;
-			
-		}
-		
-		@unlink( self::get_route($key) );		
-		
-		return true;
+		return @unlink( self::get_route($key) );
 	}
 
 	/**
@@ -165,5 +143,5 @@ class Cache {
 		}
 		return (time() > (filemtime($file) + 60 * ($time ? $time : self::$config['expires'])));
 	}
-} 
+}
 ?>

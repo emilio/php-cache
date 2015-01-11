@@ -2,7 +2,7 @@
 
 Esta clase provee una forma fácil, orientada a objetos de trabajar con una caché basada en el sistema de archivos.
 
-[Leer más]() | [El autor](http://emiliocobos.net)
+[Leer más](http://emiliocobos.net/php-cache/) | [El autor](http://emiliocobos.net) | [Contribuidores](https://github.com/ecoal95/php-cache/graphs/contributors)
 
 ## Comenzando
 Lo primero que tienes que hacer es incluir el archivo
@@ -89,3 +89,10 @@ Diferencia porcentual de velocidad: 7.1366305302393%</pre>
 **Volumen de datos grande** (con datos grandes la **diferencia de velocidad es casi nula**)
 <pre>Diferencia total: 0.29143214225769 segundos
 Diferencia porcentual de velocidad: 0.45639094202677%</pre>
+
+## Concurrencia
+Ahora la librería es resistente a problemas de concurrencia.
+Ver [pull request](https://github.com/ecoal95/php-cache/pull/3) de [https://github.com/logicaalternativa](@logicaalternativa).
+
+## Tests
+[https://github.com/logicaalternativa](@logicaalternativa) añadió tests de rendimiento más rigurosos que mi archivo `test.php`, y tests de concurrencia. Para leer sus comentarios ver el archivo `tests/README.md`.
