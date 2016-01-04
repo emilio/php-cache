@@ -1,0 +1,31 @@
+{
+    "name": "ecoal95/php-cache",
+    "type": "library",
+    "description": "Minimal caching library",
+    "keywords": ["cache", "fs" ],
+    "homepage": "https://github.com/ecoal95/php-cache",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Emilio Cobos Álvarez",
+            "email": "emiliocobos@usal.es",
+            "homepage": "http://emiliocobos.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cache\\": "src/Cache",
+            "Benchmarks\\": "benchmarks"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.*",
+        "phpunit/phpunit": "4.8.*",
+        "phpdocumentor/phpdocumentor": "2.8.*",
+        "athletic/athletic": "0.1.*"
+    }
+}
