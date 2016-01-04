@@ -1,98 +1,92 @@
-# Sistema de caché de archivos en PHP
+# PHP filesystem backed cache
 
-Esta clase provee una forma fácil, orientada a objetos de trabajar con una caché basada en el sistema de archivos.
+This class provides an easy fs-backed cache.
 
-[Leer más](http://emiliocobos.net/php-cache/) | [El autor](http://emiliocobos.net) | [Contribuidores](https://github.com/ecoal95/php-cache/graphs/contributors)
+[Read more (es)](http://emiliocobos.net/php-cache/) | [Contributors](https://github.com/ecoal95/php-cache/graphs/contributors)
 
-## Comenzando
-Lo primero que tienes que hacer es incluir el archivo
-```php
-require 'Cache.php';
-```
+## Starting
 
-### Opciones
-Hay dos opciones: `cache_dir` y `expires`.
+You can see an easy example in the `examples/` dir.
 
-* `cache_dir` es el directorio donde se almacenará la caché. Por defecto es un directorio relativo (`cache`)
-* `expires` es el tiempo *en horas* que debe de pasar para que un item de la caché expire
+You can also install this package with `composer`.
 
-**Importante**: Verifica que el archivo configurado como `cache_dir` tenga permisos de escritura. Además, **si almacenas datos que no deberían ser accesibles públicamente, tu directorio `cache_dir` debería de tener un archivo `.htaccess` con la siguiente línea:**
+## Configuration
+
+There are two main options: `cache_path` y `expires`.
+
+* `cache_path` is the directory where cache will be stored. It's a relative
+    directory by default (`cache`), but it's recommendable to re-configure it.
+* `expires` is the cache expiration time **in minutes**.
+
+**Important**: `cache_path` should be writable (that's obvious), but if it's
+public in the server, which is not recommended, you should forbid access to it.
+
+A way to do it for Apache is having a `.htaccess` as follows in the cache dir:
+
 ```
 deny from all
 ```
 
-Puedes modificar las opciones así:
+
+## Usage
+
+To store any data type you should use the `put` method using an identifier, and
+the value.
 
 ```php
-Cache::configure('nombre_opción', 'valor');
+Cache::put('key', 'value');
 ```
 
-O así:
+
+### Retrieving data
+
+To get data stored in the cache you should use:
 
 ```php
-Cache::configure(array(
-	'nombre_opcion_1' => 'valor 1',
-	// ...
-));
-```
-### Almacenando datos
-Para almacenar *cualquier tipo de dato* en la caché usa el método `put()` pasando un identificador (key) y el valor.
-```php
-Cache::put('identificador', 'valor');
+Cache::get('key');
 ```
 
-### Obteniendo datos
-Para obtener datos almacenados en la caché usa:
+If the item is not found, or it's expired, it will return `null`.
+
+#### Raw data
+
+You can store and retrieve raw data, to prevent decoding and encoding overhead.
+
+You should specify it's raw data in both  `put()` and `get()`, as follows:
 
 ```php
-Cache::get('identificador');
+Cache::put($key, $big_chunk_of_data, true);
+// ...
+Cache::get($key, true);
 ```
 
-### Borrando datos
-Simplemente invoca al método `delete()` pasando la key:
+### Deleting data
+
+You may delete a single item from de cache using the `delete()` method:
+
 ```php
-Cache::delete('identificador');
+Cache::delete($key);
 ```
 
-### Borrando toda la caché
-Usa el método `flush()` para borrar todos los datos almacenados en la caché:
+You may also flush all the cache to delete everything:
+
 ```php
 Cache::flush();
 ```
 
-## Avanzado
-Este sistema permite pasar un segundo argumento a `get()` y `put()`, que dice si los datos se van a guardar en forma de string directamente, o no. Podría ser útil para cachés de páginas enteras:
+## Race conditions
 
-```php
-if( !($cached_homepage = Cache::get('index_cached', true)) ) {
-	ob_start();
-	// Generar la página principal dinámica
-	// ...
-	$cached_homepage = ob_get_contents();
-	Cache::put('index_cached', $cached_homepage);
-}
-echo $cached_homepage;
-```
+This library makes atomic writes via `rename`, so no race condition should be
+possible.
 
+## Performance
 
-## Velocidad
-Este sistema de caché está basado en el acceso a archivos, así que es más lento que memcached o apc. No obstante, **cuanto mayores son los datos a almacenar, menor es la diferencia de velocidad**. Puedes comprobarlo ejecutando el archivo `test.php` del repositorio. Los resultados en un servidor local frente a `apc`:
+There are some benchmarks over the `benchmarks/` directory.
 
-**Volumen de datos pequeño** (nótese que _datos pequeños_ son una pequeña string, así que en estos casos no merece la pena acceder al sistema de ficheros). Aún así la diferencia real de tiempo no es muy grande.
-<pre>Diferencia total: 0.11318588256836 segundos
-Diferencia porcentual de velocidad: 48.071951581333%</pre>
+They're simple ones and you're encouraged to write more extensive ones. In
+general, **the performance difference compared with memcached or apc is almost
+unnoticeable with large chunks of data, but it's relatively high with small data
+fragments**. That's expected due to the fs access overhead.
 
-**Volumen de datos medio**
-<pre>Diferencia total: 0.099838733673096 segundos
-Diferencia porcentual de velocidad: 7.1366305302393%</pre>
-
-**Volumen de datos grande** (con datos grandes la **diferencia de velocidad es casi nula**)
-<pre>Diferencia total: 0.29143214225769 segundos
-Diferencia porcentual de velocidad: 0.45639094202677%</pre>
-
-## Concurrencia
-Ahora la librería es resistente a problemas de concurrencia.
-Ver [pull request](https://github.com/ecoal95/php-cache/pull/3) de [@logicaalternativa](https://github.com/logicaalternativa).
-
-## Tests
-[@logicaalternativa](https://github.com/logicaalternativa) añadió tests de rendimiento más rigurosos que mi archivo `test.php`, y tests de concurrencia. Para leer sus comentarios ver el archivo `tests/README.md`.
+There are also legacy tests by a contributor in the `legacy-tests` folder which
+test performance and race-condition ressistance.

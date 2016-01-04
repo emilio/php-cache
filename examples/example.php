@@ -1,8 +1,9 @@
-<?php 
+<?php
 require_once 'Cache.php';
 function get_data() {
 	// Perform a really dificult query and return the results
 }
+
 $data = Cache::get('my_key');
 
 if( ! $data ) {
