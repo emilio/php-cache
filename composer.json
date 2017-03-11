@@ -1,14 +1,14 @@
 {
-    "name": "ecoal95/php-cache",
+    "name": "emilio/php-cache",
     "type": "library",
     "description": "Minimal caching library",
     "keywords": ["cache", "fs" ],
-    "homepage": "https://github.com/ecoal95/php-cache",
+    "homepage": "https://github.com/emilio/php-cache",
     "license": "MIT",
     "authors": [
         {
             "name": "Emilio Cobos Álvarez",
-            "email": "emiliocobos@usal.es",
+            "email": "emilio@crisal.io",
             "homepage": "http://emiliocobos.me",
             "role": "Developer"
         }
